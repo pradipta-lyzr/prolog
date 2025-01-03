@@ -27,5 +27,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SERVICE_NAME: "user_backend"
           PROLOG_URL: "http://50.17.253.228:5000/add"
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: python add_changelog.py
 

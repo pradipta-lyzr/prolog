@@ -1,10 +1,11 @@
 import os
 import json
 from datetime import datetime
-from utils.studio import llm_chat
 import asyncio
 import httpx
 from dotenv import load_dotenv
+import httpx
+from openai import AsyncOpenAI
 
 load_dotenv()
 
@@ -30,6 +31,28 @@ YOUR RESPONSE SHOULD ONLY BE A VALID JSON OBJECT STRING WITH THE FOLLWING FIELDS
 }`
 DO NOT ADD ```json{response}``` around the object just send the actual response only
 """
+
+
+async def llm_chat(prompt, query):
+    client = AsyncOpenAI(
+        api_key=os.getenv("OPENAI_API_KEY"),
+    )
+
+    response = await client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {"role": "system", "content": prompt},
+            {"role": "user", "content": query},
+        ],
+        temperature=0.5,
+        max_tokens=2000,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0,
+    )
+
+    response = response.choices[0].message.content
+    return response
 
 
 async def process_pr(repo, pr_number, github_token, service_changed, prolog_url):
