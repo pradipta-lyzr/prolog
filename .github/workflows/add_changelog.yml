@@ -15,16 +15,17 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.x"
+          python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install requests
+        run: pip install -r requirements.txt 
 
       - name: Run PR Processor
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SERVICE_CHANGED: "user_backend"
+          SERVICE_NAME: "user_backend"
+          PROLOG_URL: "http://50.17.253.228:5000/add"
         run: python add_changelog.py
 

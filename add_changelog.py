@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
     REPO = os.getenv("GITHUB_REPOSITORY")  # e.g., "username/repo"
     PR_NUMBER = os.getenv("PR_NUMBER")  # PR number
-    GITHUB_TOKEN = os.getenv("GITHUB_PAT")  # GitHub token for API access
+    GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")  # GitHub token for API access
     SERVICE_NAME = os.getenv("SERVICE_NAME")  # GitHub token for API access
     PROLOG_URL = os.getenv("PROLOG_URL")
 
