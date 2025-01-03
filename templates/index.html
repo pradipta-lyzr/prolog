@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deployment Table</title>
+</head>
+<body>
+    <h1>Deployment Table</h1>
+    <form method="GET" action="/">
+        <input type="text" name="search" placeholder="Search..." value="{{ request.args.get('search', '') }}">
+        <input type="date" name="start_date" value="{{ request.args.get('start_date', '') }}">
+        <input type="date" name="end_date" value="{{ request.args.get('end_date', '') }}">
+        <button type="submit">Filter</button>
+    </form>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Deployment Date</th>
+                <th>Service Changed</th>
+                <th>PR Link</th>
+                <th>Jira/Notion Link</th>
+                <th>PR Raised By</th>
+                <th>PR Reviewed By</th>
+                <th>PR Merged By</th>
+                <th>Description</th>
+                <th>Breaking Changes</th>
+                <th>Test Cases</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for deployment in deployments %}
+            <tr>
+                <td>{{ deployment.deployment_date.strftime('%Y-%m-%d') }}</td>
+                <td>{{ deployment.service_changed }}</td>
+                <td><a href="{{ deployment.pr_link }}">{{ deployment.pr_link }}</a></td>
+                <td><a href="{{ deployment.jira_notion_link }}">{{ deployment.jira_notion_link }}</a></td>
+                <td>{{ deployment.pr_raised_by }}</td>
+                <td>{{ deployment.pr_reviewed_by }}</td>
+                <td>{{ deployment.pr_merged_by }}</td>
+                <td>{{ deployment.description }}</td>
+                <td>{{ deployment.breaking_changes }}</td>
+                <td>{{ deployment.test_cases }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div>
+        <a href="/?page={{ request.args.get('page', 1)|int - 1 if request.args.get('page', 1)|int > 1 else 1 }}">Previous</a>
+        <a href="/?page={{ request.args.get('page', 1)|int + 1 }}">Next</a>
+    </div>
+</body>
+</html>
+
