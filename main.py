@@ -1,9 +1,11 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, Response, request, jsonify, render_template
 from flask_pymongo import PyMongo
 from datetime import datetime
 import re
 from setting import settings
 import os
+import csv
+from io import StringIO
 
 app = Flask(__name__)
 print(settings.db_url)
@@ -79,6 +81,29 @@ def add_deployment():
     return (
         jsonify({"message": "Deployment added successfully", "id": str(deployment_id)}),
         201,
+    )
+
+
+@app.route("/get_csv", methods=["GET"])
+def get_csv():
+    """Endpoint to download table data as a CSV file."""
+    records = list(
+        deployments.find({}, {"_id": 0})
+    )  # Fetch all records excluding MongoDB's default _id field
+    if not records:
+        return jsonify({"message": "No data found"}), 404
+
+    # Convert records to CSV
+    csv_output = StringIO()
+    writer = csv.DictWriter(csv_output, fieldnames=records[0].keys())
+    writer.writeheader()
+    writer.writerows(records)
+    csv_output.seek(0)
+
+    return Response(
+        csv_output,
+        mimetype="text/csv",
+        headers={"Content-Disposition": "attachment;filename=deployments.csv"},
     )
 
 

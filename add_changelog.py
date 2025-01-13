@@ -19,7 +19,8 @@ Description in Details(field name: `description`): COMPLETE DETAIL about the CHA
 Breaking Changes(field name: `breaking_changed`): THE BREAKING CHANGES SHOULD BE EXPLAINED IN DETAIL
 Test Cases(field name: test_cases): THE VARIOUS TEST CASE SCENARIOS THE peron MAKING the PR HAS TESTED with.
 
-If you can not extract the values for the above fields from the give BODY of the PR then store `N/A` in those fields.
+If you can not figure out, extract the values for the above fields from the give BODY of the PR then store `N/A` in those fields.
+Sometimes the PR description would be descriptive. You have to figure out the values from those texts and also reword the texts into bullet point and rephrase it for better understanding.
 
 YOUR RESPONSE SHOULD ONLY BE A VALID JSON OBJECT STRING WITH THE FOLLWING FIELDS GIVEN IN THE EXAMPLE BELOW:
 
@@ -77,8 +78,7 @@ async def process_pr(repo, pr_number, github_token, service_changed, prolog_url)
             "pr_link": pr_data.get("html_url", ""),
             "pr_raised_by": pr_data.get("user", {}).get("login", ""),
             "pr_reviewed_by": ", ".join(
-                reviewer["user"]["login"]
-                for reviewer in pr_data.get("requested_reviewers", [])
+                reviewer["login"] for reviewer in pr_data.get("requested_reviewers", [])
             ),
             "pr_merged_by": pr_data.get("merged_by", {}).get("login", ""),
         }
@@ -111,7 +111,7 @@ if __name__ == "__main__":
 
     REPO = os.getenv("GITHUB_REPOSITORY")  # e.g., "username/repo"
     PR_NUMBER = os.getenv("PR_NUMBER")  # PR number
-    GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")  # GitHub token for API access
+    GITHUB_TOKEN = os.getenv("GITHUB_PAT")  # GitHub token for API access
     SERVICE_NAME = os.getenv("SERVICE_NAME")  # GitHub token for API access
     PROLOG_URL = os.getenv("PROLOG_URL")
 

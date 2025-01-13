@@ -18,13 +18,13 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install -r requirements.txt 
+        run: pip install httpx openai python-dotenv
 
       - name: Run PR Processor
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_PAT: ${{ secrets.TOKEN_GITHUB_PAT }}
           SERVICE_NAME: "user_backend"
           PROLOG_URL: "http://50.17.253.228:5000/add"
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
